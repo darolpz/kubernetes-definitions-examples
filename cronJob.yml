@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+metadata:
+  name: throw-dice-cron-job
+kind: CronJob
+
+spec:
+  schedule: "30 21 * * *"
+  jobTemplate:
+    spec:
+      completions: 3
+      backoffLimit: 25
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - image: kodekloud/throw-dice
+              name: throw-dice
