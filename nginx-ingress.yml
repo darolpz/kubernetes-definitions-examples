@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-ingress-controller
@@ -37,7 +37,7 @@ spec:
         - name: http
           containerPort: 80
         - name: https
-          containerPort: 43
+          containerPort: 443
 #Se debe crear un configmap para todos los parametros de nginx
 
 #kind: ConfigMap
@@ -58,6 +58,7 @@ spec:
 #    targetPort: 80
 #    name: http
 #    protocol: TCP
+#    nodePort: 30080
 #  - port: 443
 #    targetPort: 443
 #    name: http
@@ -78,12 +79,47 @@ spec:
 #apiVersion: extensions/v1beta1
 #kind: Ingress
 #metadata:
-#  name: ingress-wear
+#  name: ingress-services
+#spec:
 
 #solo 1 servicio
-#spec:
 #  backend:
 #   serviceName: service1
 #   servicePort: 80
 
-#1 role, 2 paths, 2 servicios
+#1 rule, 2 paths, 2 servicios
+#  rules:
+#  - http:
+#      paths:
+#      - path: /service1
+#        backend:
+#          serviceName: service1
+#          servicePort: 80
+#      - path: /service2
+#        backend:
+#          serviceName: service2
+#          servicePort: 80
+
+#kubectl describe ingress ingress-services
+
+#2 rules (subdominios)
+#  rules:
+#  - host: service1.domain.com
+#    http:
+#      paths:
+#      - backend:
+#         serviceName: service1
+#         servicePort: 80
+#  - host: service2.domain.com
+#    http:
+#      paths:
+#      - backend:
+#         serviceName: service2
+#         servicePort: 80
+#Si no se pone nada en host toma como una ruta general que sirve para manejar 404
+#    http:
+#      paths:
+#      - backend:
+#         serviceName: service1
+#         servicePort: 80
+
